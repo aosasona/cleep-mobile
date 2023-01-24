@@ -4,7 +4,7 @@ import { isAndroid } from "./platform";
 import storage from "./storage/default";
 
 export const appColors = {
-  dark: "#020202",
+  dark: "#000000",
   light: "#f5f5f5",
   primary: "#E11D48",
   "light-faded": "#6A6A6A",
@@ -99,6 +99,12 @@ export const componentsConfig = {
     defaultProps: {
       onTrackColor: appColors.primary,
       size: isAndroid ? "lg" : "md",
+    },
+  },
+  Input: {
+    defaultProps: {
+      py: 4,
+      rounded: 10,
     },
   },
 };

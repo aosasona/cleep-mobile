@@ -1,7 +1,7 @@
 import { SplashScreen, Stack } from "expo-router";
 import { appColors } from "../lib/theme";
 import { useEffect, useState } from "react";
-import { NativeBaseProvider, View } from "native-base";
+import { NativeBaseProvider } from "native-base";
 import { colorModeManager, extendedTheme } from "../lib/theme";
 import {
   Poppins_100Thin,
@@ -32,7 +32,9 @@ export default function AppEntry() {
   });
 
   useEffect(() => {
-    if (fontsLoaded) setAppIsReady(true);
+    if (fontsLoaded) {
+      setAppIsReady(true);
+    }
   }, [fontsLoaded]);
 
   if (!appIsReady) {

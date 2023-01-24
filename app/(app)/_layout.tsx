@@ -1,7 +1,7 @@
 import { Route } from "@react-navigation/native";
-import { Tabs } from "expo-router";
+import { SplashScreen, Tabs } from "expo-router";
 import { Box, ColorMode, Icon, useColorMode, View } from "native-base";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { appColors } from "../../lib/theme";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { isAndroid } from "../../lib/platform";
