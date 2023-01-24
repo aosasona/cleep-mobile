@@ -71,7 +71,8 @@ export const componentsConfig = {
     baseStyle: () => ({
       _dark: { bg: appColors.dark },
       _light: { bg: appColors.light },
-      px: 4,
+      px: 3,
+      py: 2,
     }),
   },
   Text: {

@@ -6,6 +6,8 @@ import { appColors } from "../../lib/theme";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { isAndroid } from "../../lib/platform";
 import { StatusBar } from "expo-status-bar";
+import CustomHeader from "../../components/custom/CustomHeader";
+import CustomHeaderTitle from "../../components/custom/CustomHeaderTitle";
 
 interface TabIconProps {
   focused: boolean;
@@ -50,8 +52,10 @@ export default function AppLayout() {
 
   const screenOptions = {
     headerShown: true,
-    tabBarLabel: () => null,
     headerShadowVisible: false,
+    headerBackground: () => <CustomHeader />,
+    headerTitle: (props: any) => <CustomHeaderTitle {...props} />,
+    tabBarLabel: () => null,
     tabBarActiveTintColor: appColors.primary,
     tabBarStyle: {
       height: isAndroid ? 70 : 85,
@@ -68,9 +72,6 @@ export default function AppLayout() {
           ...screenOptions,
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} route={route} colorMode={colorMode} />
-          ),
-          headerBackground: () => (
-            <View w="full" _dark={{ bg: "dark" }} _light={{ bg: "light" }} />
           ),
         })}
       >

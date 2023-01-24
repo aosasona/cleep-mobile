@@ -15,6 +15,7 @@ import {
   Poppins_900Black,
   useFonts,
 } from "@expo-google-fonts/poppins";
+import { GlobalProvider } from "../context/global/Provider";
 
 export default function AppEntry() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -43,14 +44,16 @@ export default function AppEntry() {
       colorModeManager={colorModeManager}
       theme={extendedTheme}
     >
-      <Stack
-        initialRouteName="app"
-        screenOptions={{
-          headerShown: false,
-          headerTintColor: appColors.primary,
-          headerBackTitleVisible: false,
-        }}
-      />
+      <GlobalProvider>
+        <Stack
+          initialRouteName="app"
+          screenOptions={{
+            headerShown: false,
+            headerTintColor: appColors.primary,
+            headerBackTitleVisible: false,
+          }}
+        />
+      </GlobalProvider>
     </NativeBaseProvider>
   );
 }
