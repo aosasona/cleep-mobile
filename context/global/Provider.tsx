@@ -9,6 +9,7 @@ import globalReducer, {
   GlobalState,
   GlobalReducerAction,
   GlobalActionEnum,
+  multiDispatch,
 } from "./Reducer";
 
 interface ProviderProps {
@@ -25,13 +26,18 @@ const GlobalContext = createContext<GlobalContextType>(null);
 function GlobalProvider({ children }: ProviderProps) {
   const initialState: GlobalState = {
     colorMode: "light",
+    hasBarCodePermission: false,
+    defaultSessionDuration: 1,
   };
 
   const [state, dispatch] = useReducer(globalReducer, initialState);
 
   useEffect(() => {
-    dispatch({ type: GlobalActionEnum.LOAD_COLOR_MODE, payload: {} });
-    dispatch({ type: GlobalActionEnum.LOAD_BARCODE_PERMISSION, payload: {} });
+    multiDispatch(dispatch, [
+      GlobalActionEnum.LOAD_COLOR_MODE,
+      GlobalActionEnum.LOAD_DEFAULT_SESSION_DURATION,
+      GlobalActionEnum.LOAD_BARCODE_PERMISSION,
+    ]);
   }, []);
 
   return (

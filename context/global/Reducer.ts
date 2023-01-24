@@ -1,17 +1,21 @@
 import { ColorMode } from "native-base";
+import { Dispatch } from "react";
 import Keys from "../../constants/keys";
 import storage from "../../lib/storage/default";
 
 export interface GlobalState {
   colorMode?: ColorMode;
+  defaultSessionDuration?: number;
   hasBarCodePermission?: boolean;
 }
 
 export enum GlobalActionEnum {
   LOAD_COLOR_MODE,
+  LOAD_DEFAULT_SESSION_DURATION,
   LOAD_BARCODE_PERMISSION,
   TOGGLE_COLOR_MODE,
   TOGGLE_BARCODE_PERMISSION,
+  CHANGE_DEFAULT_SESSION_DURATION,
 }
 
 export interface GlobalReducerAction {
@@ -40,6 +44,14 @@ export default function globalReducer(
         hasBarCodePermission,
       };
 
+    case GlobalActionEnum.LOAD_DEFAULT_SESSION_DURATION:
+      const defaultSessionDuration =
+        storage.getNumber(Keys.DEFAULT_SESSION_DURATION) || 1;
+      return {
+        ...state,
+        defaultSessionDuration,
+      };
+
     case GlobalActionEnum.TOGGLE_COLOR_MODE:
       return {
         ...state,
@@ -53,7 +65,26 @@ export default function globalReducer(
         hasBarCodePermission: action.payload.hasBarCodePermission,
       };
 
+    case GlobalActionEnum.CHANGE_DEFAULT_SESSION_DURATION:
+      storage.set(
+        Keys.DEFAULT_SESSION_DURATION,
+        action.payload.defaultSessionDuration
+      );
+      return {
+        ...state,
+        defaultSessionDuration: action.payload.defaultSessionDuration,
+      };
+
     default:
       return state;
+  }
+}
+
+export function multiDispatch(
+  dispatch: Dispatch<GlobalReducerAction>,
+  keys: GlobalActionEnum[]
+) {
+  for (const key of keys) {
+    dispatch({ type: key, payload: {} });
   }
 }

@@ -1,14 +1,20 @@
 import {
   HStack,
   ScrollView,
+  Slider,
   Switch,
   Text,
   useColorMode,
   VStack,
 } from "native-base";
 import { useContext } from "react";
+import {
+  SettingsHStackProps,
+  SettingsVStackProps,
+} from "../../constants/props";
 import { GlobalContext } from "../../context/global/Provider";
 import { GlobalActionEnum } from "../../context/global/Reducer";
+import { showAlert } from "../../lib/toast";
 
 export default function Settings() {
   const { state, dispatch } = useContext(GlobalContext);
@@ -25,19 +31,51 @@ export default function Settings() {
     });
   };
 
+  const changeDefaultSessionDuration = (val: number) => {
+    if (val == 8) {
+      showAlert(
+        "Unavailable",
+        "Sorry, this feature is not available at the moment.",
+        "error"
+      );
+      return;
+    }
+    dispatch({
+      type: GlobalActionEnum.CHANGE_DEFAULT_SESSION_DURATION,
+      payload: { defaultSessionDuration: val },
+    });
+  };
+
   return (
     <ScrollView>
-      <VStack
-        _dark={{ bg: "muted.900" }}
-        _light={{ bg: "muted.50" }}
-        px={4}
-        py={3}
-        rounded={12}
-      >
-        <HStack alignItems="center" justifyContent="space-between">
+      <VStack rounded={12}>
+        <HStack {...SettingsHStackProps}>
           <Text>Dark mode</Text>
           <Switch value={isDarkMode} onToggle={toggleTheme} />
         </HStack>
+
+        <VStack w="full" space={3} {...SettingsVStackProps}>
+          <HStack justifyContent="space-between" alignItems="center">
+            <Text>Default session duration</Text>
+            <Text fontSize={12} opacity={0.6}>
+              {state.defaultSessionDuration} days
+            </Text>
+          </HStack>
+          <Slider
+            w="full"
+            colorScheme="rose"
+            defaultValue={state.defaultSessionDuration}
+            value={state.defaultSessionDuration}
+            minValue={1}
+            maxValue={8}
+            onChange={changeDefaultSessionDuration}
+          >
+            <Slider.Track>
+              <Slider.FilledTrack />
+            </Slider.Track>
+            <Slider.Thumb />
+          </Slider>
+        </VStack>
       </VStack>
     </ScrollView>
   );

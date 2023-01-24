@@ -1,20 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import { Stack } from "expo-router";
-import {
-  ScrollView,
-  Heading,
-  HStack,
-  IconButton,
-  Icon,
-  Modal,
-  useDisclose,
-  Actionsheet,
-  Box,
-  Text,
-  useColorModeValue,
-  Slider,
-} from "native-base";
-import { useState } from "react";
+import { ScrollView, Heading, HStack, IconButton, Icon } from "native-base";
 import CustomSafeAreaView from "../../components/custom/CustomSafeAreaView";
 
 export default function Home() {
