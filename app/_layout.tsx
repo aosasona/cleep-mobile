@@ -16,6 +16,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/poppins";
 import { GlobalProvider } from "../context/global/Provider";
+import { migrate } from "../lib/database";
 
 export default function AppEntry() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -36,6 +37,10 @@ export default function AppEntry() {
       setAppIsReady(true);
     }
   }, [fontsLoaded]);
+
+  useEffect(() => {
+    migrate();
+  }, []);
 
   if (!appIsReady) {
     return <SplashScreen />;
