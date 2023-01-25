@@ -1,4 +1,5 @@
 import {
+  Divider,
   HStack,
   ScrollView,
   Slider,

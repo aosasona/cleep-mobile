@@ -25,6 +25,8 @@ const GlobalContext = createContext<GlobalContextType>(null);
 
 function GlobalProvider({ children }: ProviderProps) {
   const initialState: GlobalState = {
+    isLoadingSessions: true,
+    sessions: [],
     colorMode: "light",
     hasBarCodePermission: false,
     defaultSessionDuration: 1,
@@ -37,6 +39,7 @@ function GlobalProvider({ children }: ProviderProps) {
       GlobalActionEnum.LOAD_COLOR_MODE,
       GlobalActionEnum.LOAD_DEFAULT_SESSION_DURATION,
       GlobalActionEnum.LOAD_BARCODE_PERMISSION,
+      GlobalActionEnum.LOAD_SESSIONS,
     ]);
   }, []);
 

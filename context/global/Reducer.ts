@@ -1,15 +1,19 @@
 import { ColorMode } from "native-base";
 import { Dispatch } from "react";
 import Keys from "../../constants/keys";
+import { getSessions, Session } from "../../lib/database";
 import storage from "../../lib/storage/default";
 
 export interface GlobalState {
+  isLoadingSessions?: boolean;
+  sessions?: Session[];
   colorMode?: ColorMode;
   defaultSessionDuration?: number;
   hasBarCodePermission?: boolean;
 }
 
 export enum GlobalActionEnum {
+  LOAD_SESSIONS,
   LOAD_COLOR_MODE,
   LOAD_DEFAULT_SESSION_DURATION,
   LOAD_BARCODE_PERMISSION,
@@ -28,6 +32,14 @@ export default function globalReducer(
   action: GlobalReducerAction
 ): GlobalState {
   switch (action.type) {
+    case GlobalActionEnum.LOAD_SESSIONS:
+      const sessions = getSessions();
+      return {
+        ...state,
+        sessions,
+        isLoadingSessions: false,
+      };
+
     case GlobalActionEnum.LOAD_COLOR_MODE:
       const colorMode = (storage.getString(Keys.COLOR_MODE) ||
         "light") as ColorMode;
