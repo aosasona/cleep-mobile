@@ -10,7 +10,7 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "APP_ENVIRONMENT": "development"
+        "APP_ENVIRONMENT": "preview"
       }
     },
     "production": {
