@@ -36,7 +36,7 @@ export default function Settings() {
     if (val == 8) {
       showAlert(
         "Unavailable",
-        "Sorry, this feature is not available at the moment.",
+        "Sorry, this feature is not available yet",
         "error"
       );
       return;
@@ -59,7 +59,7 @@ export default function Settings() {
           <HStack justifyContent="space-between" alignItems="center">
             <Text>Default session duration</Text>
             <Text fontSize={12} opacity={0.6}>
-              {state.defaultSessionDuration} days
+              {state.defaultSessionDuration}
             </Text>
           </HStack>
           <Slider
@@ -76,6 +76,14 @@ export default function Settings() {
             </Slider.Track>
             <Slider.Thumb />
           </Slider>
+          <HStack justifyContent="space-between" alignItems="center" py={1}>
+            <Text fontSize={10} opacity={0.5}>
+              1 day
+            </Text>
+            <Text fontSize={10} opacity={0.5}>
+              Unlimited
+            </Text>
+          </HStack>
         </VStack>
       </VStack>
     </ScrollView>

@@ -26,6 +26,12 @@ export function createSession(sessionId: string, duration: number) {
   ]);
 }
 
+export function getSessionByID(id: number): Session {
+  const session = db.execute(`SELECT * FROM sessions WHERE id = ?`, [id]);
+
+  return session.rows._array[0];
+}
+
 export function getSessions(): Session[] {
   const sessions = db.execute(`SELECT * FROM sessions`);
 
