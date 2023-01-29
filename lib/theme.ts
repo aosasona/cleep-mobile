@@ -1,11 +1,11 @@
 import { ColorMode, extendTheme, StorageManager, Theme } from "native-base";
 import Keys from "../constants/keys";
-import { isAndroid } from "./platform";
+import { componentsConfig } from "./configs/components";
 import storage from "./storage/default";
 
 export const appColors = {
   dark: "#000000",
-  light: "#f5f5f5",
+  light: "#f1f1f1",
   primary: "#E11D48",
   "light-faded": "#6A6A6A",
   "dark-faded": "#A8A8A8",
@@ -64,58 +64,6 @@ const fonts = {
   heading: "Poppins",
   body: "Poppins",
   mono: "Poppins",
-};
-
-export const componentsConfig = {
-  ScrollView: {
-    baseStyle: () => ({
-      _dark: { bg: appColors.dark },
-      _light: { bg: appColors.light },
-      px: 3,
-      py: 2,
-    }),
-  },
-  Text: {
-    baseStyle: () => ({
-      fontSize: 16,
-      fontWeight: 500,
-    }),
-  },
-  SectionList: {
-    baseStyle: () => ({
-      _dark: { bg: appColors.dark },
-      _light: { bg: appColors.light },
-      px: 4,
-    }),
-  },
-  FlatList: {
-    baseStyle: () => ({
-      _dark: { bg: appColors.dark },
-      _light: { bg: appColors.light },
-      px: 4,
-    }),
-  },
-  Switch: {
-    defaultProps: {
-      onTrackColor: appColors.primary,
-      size: isAndroid ? "lg" : "md",
-    },
-  },
-  Input: {
-    defaultProps: {
-      py: 4,
-      rounded: 10,
-    },
-  },
-  Checkbox: {
-    defaultProps: {
-      _checked: {
-        bg: appColors.primary,
-        color: "muted.50",
-        borderColor: appColors.primary,
-      },
-    },
-  },
 };
 
 export const extendedTheme = extendTheme({

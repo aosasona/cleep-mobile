@@ -1,16 +1,10 @@
-import { Feather } from "@expo/vector-icons";
-import {
-  Box,
-  Checkbox,
-  HStack,
-  Icon,
-  Pressable,
-  Text,
-  VStack,
-} from "native-base";
-import { useMemo } from "react";
-import { Session } from "../../lib/db/database";
-import { hasExpired } from "../../lib/time";
+import {Feather} from "@expo/vector-icons";
+import {NavigationProp} from "@react-navigation/native";
+import {Box, Checkbox, HStack, Icon, Pressable, Text, useColorModeValue, VStack} from "native-base";
+import {useMemo} from "react";
+import {screens} from "../../constants/screens";
+import {Session} from "../../lib/db/database";
+import {hasExpired} from "../../lib/time";
 
 interface Props {
   idx: number;
@@ -18,6 +12,7 @@ interface Props {
   isEditing: boolean;
   selected: number[];
   handleSelect: (idx: number) => void;
+  navigation: NavigationProp<any>;
 }
 
 export default function SessionCard({
@@ -26,6 +21,7 @@ export default function SessionCard({
   selected,
   isEditing,
   handleSelect,
+  navigation,
 }: Props) {
   const isSelected = useMemo(
     () => selected.includes(idx),
@@ -34,18 +30,25 @@ export default function SessionCard({
 
   const dur = Math.ceil(session.duration / 24);
 
+  const highlightBg = useColorModeValue("muted.200", "muted.900");
+
   const expired = useMemo(
     () => hasExpired(session.created_at, session.duration),
     [session]
   );
 
+  const goToCleepboard = () => {
+    navigation.navigate(screens.CLEEPBOARD, {session_id: session.session_id});
+  };
+
   return (
     <Pressable
-      bg={isSelected ? "muted.900" : "transparent"}
-      _pressed={{ opacity: 0.5 }}
+      bg={isSelected ? highlightBg : "transparent"}
+      _pressed={{opacity: 0.5}}
       disabled={expired || isEditing}
       py={3}
       px={3}
+      onPress={() => goToCleepboard()}
     >
       <HStack justifyContent="space-between" alignItems="center">
         <Box>
@@ -70,7 +73,7 @@ export default function SessionCard({
             </VStack>
           </HStack>
         </Box>
-        <Icon as={Feather} name="chevron-right" opacity={0.4} />
+        <Icon as={Feather} name="chevron-right" opacity={0.4}/>
       </HStack>
     </Pressable>
   );

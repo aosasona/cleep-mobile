@@ -11,10 +11,10 @@ import { useContext } from "react";
 import {
   SettingsHStackProps,
   SettingsVStackProps,
-} from "../../constants/props";
-import { GlobalContext } from "../../context/global/Provider";
-import { GlobalActionEnum } from "../../context/global/Reducer";
-import { showAlert } from "../../lib/toast";
+} from "../../../constants/props";
+import { GlobalContext } from "../../../context/global/Provider";
+import { GlobalActionEnum } from "../../../context/global/Reducer";
+import { showAlert } from "../../../lib/toast";
 
 export default function Settings() {
   const { state, dispatch } = useContext(GlobalContext);
