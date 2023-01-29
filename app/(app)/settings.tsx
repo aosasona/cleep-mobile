@@ -1,5 +1,4 @@
 import {
-  Divider,
   HStack,
   ScrollView,
   Slider,
@@ -49,7 +48,7 @@ export default function Settings() {
 
   return (
     <ScrollView>
-      <VStack rounded={12}>
+      <VStack space={4}>
         <HStack {...SettingsHStackProps}>
           <Text>Dark mode</Text>
           <Switch value={isDarkMode} onToggle={toggleTheme} />
@@ -64,7 +63,6 @@ export default function Settings() {
           </HStack>
           <Slider
             w="full"
-            colorScheme="rose"
             defaultValue={state.defaultSessionDuration}
             value={state.defaultSessionDuration}
             minValue={1}
@@ -72,9 +70,9 @@ export default function Settings() {
             onChange={changeDefaultSessionDuration}
           >
             <Slider.Track>
-              <Slider.FilledTrack />
+              <Slider.FilledTrack bg="primary" />
             </Slider.Track>
-            <Slider.Thumb />
+            <Slider.Thumb bg="primary" />
           </Slider>
           <HStack justifyContent="space-between" alignItems="center" py={1}>
             <Text fontSize={10} opacity={0.5}>

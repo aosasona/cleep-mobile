@@ -8,10 +8,11 @@ import {
   useColorModeValue,
   View,
 } from "native-base";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { createSession } from "../../lib/requests/session";
 import { handleException } from "../../lib/error";
 import { showToast } from "../../lib/toast";
+import { GlobalContext } from "../../context/global/Provider";
 
 interface Props {
   signingKey: string;
@@ -26,6 +27,8 @@ export default function CreateModal({
   toggleShow,
   setSigningKey,
 }: Props) {
+  const { state } = useContext(GlobalContext);
+
   const [showKey, setShowKey] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -35,7 +38,10 @@ export default function CreateModal({
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      const data = await createSession(signingKey);
+      const data = await createSession(
+        signingKey,
+        state.defaultSessionDuration
+      );
       setSigningKey("");
       toggleShow();
     } catch (err) {
@@ -57,10 +63,10 @@ export default function CreateModal({
     >
       <Modal.Content bg={bg}>
         <Modal.CloseButton />
-        <Modal.Header bg={bg} borderBottomWidth={0}>
+        <Modal.Header bg={bg} borderBottomWidth={0} py={5}>
           New Session
         </Modal.Header>
-        <Modal.Body bg={bg} px={2} py={2} _scrollview={{ bg }}>
+        <Modal.Body bg={bg} px={1} py={1} _scrollview={{ bg }}>
           <View flex={1}>
             <Input
               bg={bg}

@@ -11,6 +11,7 @@ import {
   VStack,
   Fab,
   Button,
+  Divider,
 } from "native-base";
 import { Fragment, useContext, useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
@@ -54,18 +55,20 @@ export default function Home() {
     setShowCreateModal(!showCreateModal);
   };
 
-  const selectAll = () => {
-    state.sessions.forEach((_, idx) => {
-      handleSessionCardSelect(idx, state.sessions.length != selected.length);
-    });
+  const handleMultipleSelect = (select: boolean) => {
+    if (!select) return setSelected([]);
+
+    const sel = [];
+    for (let idx = 0; idx < state.sessions.length; idx++) {
+      sel.push(idx);
+    }
+    return setSelected(sel);
   };
 
-  const handleSessionCardSelect = (idx: number, select: boolean) => {
-    if (!select) {
-      if (selected.includes(idx)) {
-        const filtered = selected.filter((val) => val != idx);
-        setSelected(filtered);
-      }
+  const handleSessionCardSelect = (idx: number) => {
+    if (selected.includes(idx)) {
+      const filtered = selected.filter((val) => val != idx);
+      setSelected(filtered);
       return;
     }
     setSelected((prev) => [...prev, idx]);
@@ -89,7 +92,9 @@ export default function Home() {
           <Button
             _text={{ fontSize: 18, fontWeight: 400, color: "primary" }}
             _pressed={{ opacity: 0.5 }}
-            onPress={selectAll}
+            onPress={() =>
+              handleMultipleSelect(state.sessions.length != selected.length)
+            }
           >
             {state.sessions.length == selected.length
               ? "Deselect All"
@@ -102,18 +107,23 @@ export default function Home() {
   return (
     <>
       <ScrollView
+        px={0}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <Stack.Screen options={{ headerShown: false }} />
+        <Stack.Screen options={{ headerShown: true }} />
+
+        <Heading fontSize={40} px={3}>
+          Sessions
+        </Heading>
 
         {state.isLoadingSessions ? (
           <Box height={100} justifyContent="center">
             <Spinner color="primary" />
           </Box>
         ) : state.sessions?.length > 0 ? (
-          <VStack>
+          <VStack divider={<Divider opacity={0.3} />} mt={2}>
             {state.sessions.map((session, idx) => (
               <SessionCard
                 key={idx}

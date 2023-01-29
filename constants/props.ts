@@ -1,11 +1,17 @@
+export const SharedSettingsStackProps = {
+  _dark: { bg: "muted.900" },
+  _light: { bg: "muted.50" },
+  px: 4,
+  py: 3,
+  rounded: 14,
+};
+
 export const SettingsHStackProps = {
   alignItems: "center",
   justifyContent: "space-between",
-  px: 3,
-  py: 3,
+  ...SharedSettingsStackProps,
 };
 
 export const SettingsVStackProps = {
-  px: 3,
-  py: 3,
+  ...SharedSettingsStackProps,
 };

@@ -107,6 +107,15 @@ export const componentsConfig = {
       rounded: 10,
     },
   },
+  Checkbox: {
+    defaultProps: {
+      _checked: {
+        bg: appColors.primary,
+        color: "muted.50",
+        borderColor: appColors.primary,
+      },
+    },
+  },
 };
 
 export const extendedTheme = extendTheme({

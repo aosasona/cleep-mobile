@@ -15,7 +15,9 @@ export function getSessionByID(id: number): Session {
 }
 
 export function getSessions(): Session[] {
-  const sessions = db.execute(`SELECT * FROM sessions`);
+  const sessions = db.execute(
+    `SELECT * FROM sessions ORDER BY created_at DESC`
+  );
 
   return sessions.rows._array;
 }
