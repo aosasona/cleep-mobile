@@ -1,9 +1,7 @@
 import {
   AspectRatio,
-  Box,
   Button,
   Flex,
-  Heading,
   Input,
   KeyboardAvoidingView,
   Text,

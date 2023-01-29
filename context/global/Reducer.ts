@@ -1,7 +1,8 @@
 import { ColorMode } from "native-base";
 import { Dispatch } from "react";
 import Keys from "../../constants/keys";
-import { getSessions, Session } from "../../lib/database";
+import { getSessions } from "../../lib/db/session";
+import { Session } from "../../lib/db/database";
 import storage from "../../lib/storage/default";
 
 export interface GlobalState {

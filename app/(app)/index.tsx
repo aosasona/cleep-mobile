@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import { Stack } from "expo-router";
+import { Stack, useNavigation } from "expo-router";
 import {
   ScrollView,
   Heading,
@@ -9,24 +9,28 @@ import {
   Box,
   Spinner,
   VStack,
-  Text,
-  AspectRatio,
+  Fab,
+  Button,
 } from "native-base";
-import { useContext, useState } from "react";
-import { RefreshControl, useWindowDimensions } from "react-native";
+import { Fragment, useContext, useEffect, useState } from "react";
+import { RefreshControl } from "react-native";
 import CustomSafeAreaView from "../../components/custom/CustomSafeAreaView";
 import { GlobalContext } from "../../context/global/Provider";
-import Lottie from "lottie-react-native";
 import { GlobalActionEnum } from "../../context/global/Reducer";
 import { showToast } from "../../lib/toast";
+import NoSessions from "../../components/sessions/NoSessions";
+import CreateModal from "../../components/sessions/CreateSessionModal";
+import SessionCard from "../../components/sessions/SessionCard";
 
 export default function Home() {
   const { state, dispatch } = useContext(GlobalContext);
-  const { height, width } = useWindowDimensions();
+  const navigation = useNavigation();
 
   const [refreshing, setRefreshing] = useState(false);
-
-  const lottieWidth = width * 0.6;
+  const [isEditing, setIsEditing] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [selected, setSelected] = useState<number[]>([]);
+  const [signingKey, setSigningKey] = useState("");
 
   const onRefresh = () => {
     try {
@@ -39,65 +43,107 @@ export default function Home() {
     }
   };
 
+  const toggleEditing = () => {
+    if (isEditing) {
+      setSelected([]);
+    }
+    setIsEditing(!isEditing);
+  };
+
+  const toggleCreateModal = () => {
+    setShowCreateModal(!showCreateModal);
+  };
+
+  const selectAll = () => {
+    state.sessions.forEach((_, idx) => {
+      handleSessionCardSelect(idx, state.sessions.length != selected.length);
+    });
+  };
+
+  const handleSessionCardSelect = (idx: number, select: boolean) => {
+    if (!select) {
+      if (selected.includes(idx)) {
+        const filtered = selected.filter((val) => val != idx);
+        setSelected(filtered);
+      }
+      return;
+    }
+    setSelected((prev) => [...prev, idx]);
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      headerTitle: "",
+      headerRight: () => (
+        <Button
+          _text={{ fontSize: 18, fontWeight: 400, color: "primary" }}
+          _pressed={{ opacity: 0.5 }}
+          onPress={toggleEditing}
+        >
+          {isEditing ? "Cancel" : "Edit"}
+        </Button>
+      ),
+      headerLeft: () =>
+        isEditing && (
+          <Button
+            _text={{ fontSize: 18, fontWeight: 400, color: "primary" }}
+            _pressed={{ opacity: 0.5 }}
+            onPress={selectAll}
+          >
+            {state.sessions.length == selected.length
+              ? "Deselect All"
+              : "Select all"}
+          </Button>
+        ),
+    });
+  }, [state.sessions, selected, isEditing]);
+
   return (
-    <CustomSafeAreaView>
+    <>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         <Stack.Screen options={{ headerShown: false }} />
-        <HStack justifyContent="space-between" alignItems="center">
-          <Heading fontSize={32} mt={2}>
-            Sessions
-          </Heading>
-          <IconButton
-            icon={<Icon as={AntDesign} name="pluscircleo" />}
-            _icon={{ size: "md", color: "primary" }}
-            _pressed={{ opacity: 0.5 }}
-          />
-        </HStack>
 
         {state.isLoadingSessions ? (
           <Box height={100} justifyContent="center">
             <Spinner color="primary" />
           </Box>
         ) : state.sessions?.length > 0 ? (
-          <></>
+          <VStack>
+            {state.sessions.map((session, idx) => (
+              <SessionCard
+                key={idx}
+                idx={idx}
+                selected={selected}
+                session={session}
+                isEditing={isEditing}
+                handleSelect={handleSessionCardSelect}
+              />
+            ))}
+          </VStack>
         ) : (
-          <Box
-            height={height * 0.7}
-            alignItems="center"
-            justifyContent="center"
-          >
-            <VStack space={2}>
-              <AspectRatio
-                w={lottieWidth > 200 ? lottieWidth : 250}
-                ratio={1}
-                mx="auto"
-              >
-                <Box>
-                  <Lottie
-                    source={require("../../assets/lottie/empty.json")}
-                    autoPlay={true}
-                    loop={true}
-                  />
-                </Box>
-              </AspectRatio>
-              <Heading textAlign="center">No sessions</Heading>
-              <Text
-                fontSize={14}
-                maxW={width * 0.75}
-                textAlign="center"
-                opacity={0.5}
-              >
-                Looks like you have not joined any Cleep sessions on this
-                device.
-              </Text>
-            </VStack>
-          </Box>
+          <NoSessions />
         )}
       </ScrollView>
-    </CustomSafeAreaView>
+      <CreateModal
+        show={showCreateModal}
+        signingKey={signingKey}
+        toggleShow={toggleCreateModal}
+        setSigningKey={setSigningKey}
+      />
+      <Fab
+        renderInPortal={false}
+        shadow={3}
+        bottom={6}
+        right={6}
+        bg="primary"
+        icon={<Icon color="muted.50" as={AntDesign} name="plus" size="2xl" />}
+        onPress={toggleCreateModal}
+      />
+    </>
   );
 }
