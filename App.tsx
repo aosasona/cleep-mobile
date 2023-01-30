@@ -16,8 +16,8 @@ import {useEffect, useState} from "react";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import MainStack from "./app/stacks/main";
 import {GlobalProvider} from "./context/global/Provider";
+import {colorModeManager, extendedTheme} from "./lib/configs/theme";
 import {migrate} from "./lib/db/database";
-import {colorModeManager, extendedTheme} from "./lib/theme";
 
 (async () => await SplashScreen.preventAutoHideAsync())();
 
