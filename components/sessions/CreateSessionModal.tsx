@@ -67,26 +67,22 @@ export default function CreateModal({
           New Session
         </Modal.Header>
         <Modal.Body bg={bg} px={1} py={1} _scrollview={{ bg }}>
-          <View flex={1}>
-            <Input
-              bg={bg}
-              type={showKey ? "text" : "password"}
-              textAlign="center"
-              variant="filled"
-              placeholder="Enter a signing key"
-              value={signingKey}
-              onChangeText={setSigningKey}
-              InputRightElement={
-                <IconButton
-                  icon={
-                    <Icon as={Feather} name={!showKey ? "eye-off" : "eye"} />
-                  }
-                  _icon={{ size: 4, color: color, mx: 2 }}
-                  onPress={() => setShowKey(!showKey)}
-                />
-              }
-            />
-          </View>
+          <Input
+            bg={bg}
+            type={showKey ? "text" : "password"}
+            textAlign="center"
+            variant="filled"
+            placeholder="Enter a signing key"
+            value={signingKey}
+            onChangeText={setSigningKey}
+            InputRightElement={
+              <IconButton
+                icon={<Icon as={Feather} name={!showKey ? "eye-off" : "eye"} />}
+                _icon={{ size: 4, color: color, mx: 2 }}
+                onPress={() => setShowKey(!showKey)}
+              />
+            }
+          />
         </Modal.Body>
         <Modal.Footer bg={bg} borderTopWidth={0}>
           <Button

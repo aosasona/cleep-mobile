@@ -11,13 +11,13 @@ import {
 	useFonts,
 } from "@expo-google-fonts/poppins";
 import * as SplashScreen from "expo-splash-screen";
-import {NativeBaseProvider} from "native-base";
-import {useEffect, useState} from "react";
-import {SafeAreaProvider} from "react-native-safe-area-context";
+import { NativeBaseProvider } from "native-base";
+import { useEffect, useState } from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import MainStack from "./app/stacks/main";
-import {GlobalProvider} from "./context/global/Provider";
-import {colorModeManager, extendedTheme} from "./lib/configs/theme";
-import {migrate} from "./lib/db/database";
+import { GlobalProvider } from "./context/global/Provider";
+import { colorModeManager, extendedTheme } from "./lib/configs/theme";
+import { migrate } from "./lib/db/database";
 
 (async () => await SplashScreen.preventAutoHideAsync())();
 
@@ -56,23 +56,22 @@ export default function AppEntry() {
 
 	const onNavReady = () => {
 		setNavReady(true);
-	}
+	};
 
 	if (!appIsReady) {
 		return null;
 	}
 
-
 	return (
-	  <NativeBaseProvider
-		colorModeManager={colorModeManager}
-		theme={extendedTheme}
-	  >
-		  <GlobalProvider>
-			  <SafeAreaProvider>
-				  <MainStack onNavReady={onNavReady}/>
-			  </SafeAreaProvider>
-		  </GlobalProvider>
-	  </NativeBaseProvider>
+		<NativeBaseProvider
+			colorModeManager={colorModeManager}
+			theme={extendedTheme}
+		>
+			<GlobalProvider>
+				<SafeAreaProvider>
+					<MainStack onNavReady={onNavReady} />
+				</SafeAreaProvider>
+			</GlobalProvider>
+		</NativeBaseProvider>
 	);
 }
