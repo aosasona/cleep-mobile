@@ -21,3 +21,14 @@ export function getSessions(): Session[] {
 
   return sessions.rows._array;
 }
+
+export function deleteSession(id: number) {
+  db.execute(`DELETE  FROM sessions WHERE id = ?`, [id]);
+}
+
+export function batchDeleteSessions(ids: number[], data: Session[]) {
+  for (const idx of ids) {
+    const id = data[idx].id;
+    deleteSession(id);
+  }
+}

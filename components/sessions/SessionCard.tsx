@@ -1,10 +1,19 @@
-import {Feather} from "@expo/vector-icons";
-import {NavigationProp} from "@react-navigation/native";
-import {Box, Checkbox, HStack, Icon, Pressable, Text, useColorModeValue, VStack} from "native-base";
-import {useMemo} from "react";
-import {screens} from "../../constants/screens";
-import {Session} from "../../lib/db/database";
-import {hasExpired} from "../../lib/time";
+import { Feather } from "@expo/vector-icons";
+import { NavigationProp } from "@react-navigation/native";
+import {
+  Box,
+  Checkbox,
+  HStack,
+  Icon,
+  Pressable,
+  Text,
+  useColorModeValue,
+  VStack,
+} from "native-base";
+import { useMemo } from "react";
+import { screens } from "../../constants/screens";
+import { Session } from "../../lib/db/database";
+import { hasExpired } from "../../lib/time";
 
 interface Props {
   idx: number;
@@ -38,13 +47,13 @@ export default function SessionCard({
   );
 
   const goToCleepboard = () => {
-    navigation.navigate(screens.CLEEPBOARD, {session_id: session.session_id});
+    navigation.navigate(screens.CLEEPBOARD, { session_id: session.session_id });
   };
 
   return (
     <Pressable
       bg={isSelected ? highlightBg : "transparent"}
-      _pressed={{opacity: 0.5}}
+      _pressed={{ opacity: 0.5 }}
       disabled={expired || isEditing}
       py={3}
       px={3}
@@ -73,7 +82,7 @@ export default function SessionCard({
             </VStack>
           </HStack>
         </Box>
-        <Icon as={Feather} name="chevron-right" opacity={0.4}/>
+        <Icon as={Feather} name="chevron-right" opacity={0.4} />
       </HStack>
     </Pressable>
   );
