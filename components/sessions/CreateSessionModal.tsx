@@ -6,7 +6,6 @@ import {
   Input,
   Modal,
   useColorModeValue,
-  View,
 } from "native-base";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { createSession } from "../../lib/requests/session";
@@ -63,10 +62,10 @@ export default function CreateModal({
     >
       <Modal.Content bg={bg}>
         <Modal.CloseButton />
-        <Modal.Header bg={bg} borderBottomWidth={0} py={5}>
+        <Modal.Header bg={bg} borderBottomWidth={0} pt={5}>
           New Session
         </Modal.Header>
-        <Modal.Body bg={bg} px={1} py={1} _scrollview={{ bg }}>
+        <Modal.Body bg={bg} px={1} pt={1} pb={0} _scrollview={{ bg }}>
           <Input
             bg={bg}
             type={showKey ? "text" : "password"}
@@ -84,12 +83,13 @@ export default function CreateModal({
             }
           />
         </Modal.Body>
-        <Modal.Footer bg={bg} borderTopWidth={0}>
+        <Modal.Footer bg={bg} borderTopWidth={0} pb={6}>
           <Button
+            w="full"
             bg="primary"
-            py={3}
+            py={4}
             px={4}
-            rounded={20}
+            rounded={6}
             _text={{ fontSize: 12 }}
             _pressed={{ opacity: 0.5 }}
             isLoading={loading}

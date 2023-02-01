@@ -122,16 +122,18 @@ export default function Home({ navigation }: ScreenProps) {
 			headerShown: true,
 			headerTitle: "",
 			headerRight: () => (
-				<HStack>
+				<HStack space={4}>
 					<Button
 						_text={{ fontSize: 18, fontWeight: 400, color: "primary" }}
 						_pressed={{ opacity: 0.5 }}
 						onPress={toggleEditing}
+						px={0}
 					>
 						{isEditing ? "Cancel" : "Edit"}
 					</Button>
 					{isEditing && (
 						<IconButton
+							px={0}
 							icon={
 								<Icon as={Ionicons} name="ios-trash-outline" color="primary" />
 							}
@@ -146,6 +148,7 @@ export default function Home({ navigation }: ScreenProps) {
 					<Button
 						_text={{ fontSize: 18, fontWeight: 400, color: "primary" }}
 						_pressed={{ opacity: 0.5 }}
+						px={0}
 						onPress={() =>
 							handleMultipleSelect(state.sessions.length != selected.length)
 						}

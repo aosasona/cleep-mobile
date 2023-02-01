@@ -1,18 +1,18 @@
-import {isAndroid} from "../platform";
+import { isAndroid } from "../platform";
 
 export const componentsConfig = {
   ScrollView: {
     baseStyle: () => ({
-      _dark: {bg: "dark"},
-      _light: {bg: "light"},
+      _dark: { bg: "dark" },
+      _light: { bg: "light" },
       px: 3,
       py: 2,
     }),
   },
   View: {
     baseStyle: () => ({
-      _dark: {bg: "dark"},
-      _light: {bg: "light"},
+      _dark: { bg: "dark" },
+      _light: { bg: "light" },
     }),
   },
   Text: {
@@ -23,15 +23,15 @@ export const componentsConfig = {
   },
   SectionList: {
     baseStyle: () => ({
-      _dark: {bg: "dark"},
-      _light: {bg: "light"},
+      _dark: { bg: "dark" },
+      _light: { bg: "light" },
       px: 4,
     }),
   },
   FlatList: {
     baseStyle: () => ({
-      _dark: {bg: "dark"},
-      _light: {bg: "light"},
+      _dark: { bg: "dark" },
+      _light: { bg: "light" },
       px: 4,
     }),
   },
@@ -44,7 +44,7 @@ export const componentsConfig = {
   Input: {
     defaultProps: {
       py: 4,
-      rounded: 10,
+      rounded: 6,
     },
   },
   Checkbox: {
