@@ -11,6 +11,7 @@ import {
 	IconButton,
 	ScrollView,
 	Spinner,
+	View,
 	VStack,
 } from "native-base";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -102,8 +103,10 @@ export default function Home({ navigation }: ScreenProps) {
 					},
 					{
 						text: "Confirm",
+						style: "destructive",
 						onPress: () => {
 							batchDeleteSessions(selected, state.sessions);
+							toggleEditing();
 							onRefresh();
 						},
 					},
@@ -156,7 +159,7 @@ export default function Home({ navigation }: ScreenProps) {
 	}, [state.sessions, selected, isEditing]);
 
 	return (
-		<>
+		<View flex={1}>
 			<ScrollView
 				px={0}
 				refreshControl={
@@ -172,7 +175,7 @@ export default function Home({ navigation }: ScreenProps) {
 						<Spinner color="primary" />
 					</Box>
 				) : state.sessions?.length > 0 ? (
-					<VStack divider={<Divider opacity={0.3} />} mt={2}>
+					<VStack divider={<Divider opacity={0.3} />} mt={2} px={1}>
 						{state.sessions.map((session, idx) => (
 							<SessionCard
 								key={idx}
@@ -204,6 +207,6 @@ export default function Home({ navigation }: ScreenProps) {
 				icon={<Icon color="muted.50" as={AntDesign} name="plus" size="2xl" />}
 				onPress={toggleCreateModal}
 			/>
-		</>
+		</View>
 	);
 }

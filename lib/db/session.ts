@@ -11,7 +11,15 @@ export function createSession(sessionId: string, duration: number) {
 export function getSessionByID(id: number): Session {
   const session = db.execute(`SELECT * FROM sessions WHERE id = ?`, [id]);
 
-  return session.rows._array[0];
+  return session?.rows?._array[0] || null;
+}
+
+export function getSessionBySessionID(session_id: number): Session {
+  const session = db.execute(`SELECT * FROM sessions WHERE session_id = ?`, [
+    session_id,
+  ]);
+
+  return session?.rows?._array[0] || null;
 }
 
 export function getSessions(): Session[] {

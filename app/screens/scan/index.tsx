@@ -3,6 +3,7 @@ import { BarCodeScanner, BarCodeScannerResult } from "expo-barcode-scanner";
 import * as Haptics from "expo-haptics";
 import {
 	AspectRatio,
+	Box,
 	Button,
 	Flex,
 	Input,
@@ -12,8 +13,9 @@ import {
 	View,
 	VStack,
 } from "native-base";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useWindowDimensions } from "react-native";
+import CustomSafeAreaView from "../../../components/custom/CustomSafeAreaView";
 import { screens } from "../../../constants/screens";
 import { GlobalContext } from "../../../context/global/Provider";
 import { GlobalActionEnum } from "../../../context/global/Reducer";
@@ -59,6 +61,8 @@ export default function Scan({ navigation }: ScreenProps) {
 			return showToast("Error", "Oops! Invalid QR code", "error");
 		}
 
+		// TODO: Get session key before redirecting
+
 		Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 			.then()
 			.catch();
@@ -70,7 +74,7 @@ export default function Scan({ navigation }: ScreenProps) {
 	}, []);
 
 	return (
-		<View flex={1}>
+		<CustomSafeAreaView>
 			<KeyboardAvoidingView height="full" behavior="padding">
 				<View flex={1}>
 					{!state.hasBarCodePermission ? (
@@ -78,7 +82,7 @@ export default function Scan({ navigation }: ScreenProps) {
 							<Text opacity={0.5}>Permission not granted to app</Text>
 						</Flex>
 					) : (
-						<Fragment>
+						<Box h="full" justifyContent="center">
 							<Text maxW="80%" textAlign="center" mx="auto">
 								Go to <Text color="primary">cleep.app</Text> or create a session
 								on another device to get the QR code
@@ -123,10 +127,10 @@ export default function Scan({ navigation }: ScreenProps) {
 									Join session manually
 								</Button>
 							</VStack>
-						</Fragment>
+						</Box>
 					)}
 				</View>
 			</KeyboardAvoidingView>
-		</View>
+		</CustomSafeAreaView>
 	);
 }

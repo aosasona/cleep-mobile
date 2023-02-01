@@ -54,10 +54,10 @@ export default function SessionCard({
     <Pressable
       bg={isSelected ? highlightBg : "transparent"}
       _pressed={{ opacity: 0.5 }}
-      disabled={expired || isEditing}
+      disabled={expired}
       py={3}
       px={3}
-      onPress={() => goToCleepboard()}
+      onPress={() => (isEditing ? handleSelect(idx) : goToCleepboard())}
     >
       <HStack justifyContent="space-between" alignItems="center">
         <Box>
