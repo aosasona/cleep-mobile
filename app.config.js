@@ -10,9 +10,9 @@ export default {
 	jsEngine: "hermes",
 	scheme: "cleep",
 	splash: {
-		image: "./assets/splash.png",
+		image: "./assets/white-splash.png",
 		resizeMode: "contain",
-		backgroundColor: "#000000",
+		backgroundColor: "#E11D48",
 	},
 	updates: {
 		fallbackToCacheTimeout: 0,
@@ -22,18 +22,16 @@ export default {
 		associatedDomains: ["applinks:cleep.app", "applinks:www.cleep.app"],
 		supportsTablet: false,
 		bundleIdentifier: IS_IN_DEVELOPMENT
-		  ? "com.wytehq.cleep.dev"
-		  : "com.wytehq.cleep",
+			? "com.wytehq.cleep.dev"
+			: "com.wytehq.cleep",
 	},
 	android: {
 		adaptiveIcon: {
 			foregroundImage:
-			  "./assets/adaptive-icon" + (IS_IN_DEVELOPMENT ? "-dev" : "") + ".png",
+				"./assets/adaptive-icon" + (IS_IN_DEVELOPMENT ? "-dev" : "") + ".png",
 			backgroundColor: IS_IN_DEVELOPMENT ? "#F5F5F5" : "#E11D48",
 		},
 		package: IS_IN_DEVELOPMENT ? "com.wytehq.cleep.dev" : "com.wytehq.cleep",
-		useNextNotificationsApi: true,
-		allowBackup: true,
 	},
 	extra: {
 		eas: {
