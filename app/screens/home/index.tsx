@@ -14,7 +14,13 @@ import {
 	View,
 	VStack,
 } from "native-base";
-import { useCallback, useContext, useEffect, useState } from "react";
+import {
+	useCallback,
+	useContext,
+	useEffect,
+	useLayoutEffect,
+	useState,
+} from "react";
 import { Alert, RefreshControl } from "react-native";
 import CreateModal from "../../../components/sessions/CreateSessionModal";
 import NoSessions from "../../../components/sessions/NoSessions";
@@ -47,6 +53,52 @@ export default function Home({ navigation }: ScreenProps) {
 			};
 		}, [])
 	);
+
+	useEffect(() => onRefresh(), [showCreateModal]);
+
+	useLayoutEffect(() => {
+		navigation.setOptions({
+			headerShown: true,
+			headerTitle: "",
+			headerRight: () => (
+				<HStack space={4}>
+					<Button
+						_text={{ fontSize: 18, fontWeight: 400, color: "primary" }}
+						_pressed={{ opacity: 0.5 }}
+						onPress={toggleEditing}
+						px={0}
+					>
+						{isEditing ? "Cancel" : "Edit"}
+					</Button>
+					{isEditing && (
+						<IconButton
+							px={0}
+							icon={
+								<Icon as={Ionicons} name="ios-trash-outline" color="primary" />
+							}
+							_pressed={{ opacity: 0.5 }}
+							onPress={handleMultipleDelete}
+						/>
+					)}
+				</HStack>
+			),
+			headerLeft: () =>
+				isEditing && (
+					<Button
+						_text={{ fontSize: 18, fontWeight: 400, color: "primary" }}
+						_pressed={{ opacity: 0.5 }}
+						px={0}
+						onPress={() =>
+							handleMultipleSelect(state.sessions.length != selected.length)
+						}
+					>
+						{state.sessions.length == selected.length
+							? "Deselect All"
+							: "Select all"}
+					</Button>
+				),
+		});
+	}, [state.sessions, selected, isEditing]);
 
 	const onRefresh = () => {
 		try {
@@ -116,50 +168,6 @@ export default function Home({ navigation }: ScreenProps) {
 			showToast("Error", "Something went wrong!", "error");
 		}
 	};
-
-	useEffect(() => {
-		navigation.setOptions({
-			headerShown: true,
-			headerTitle: "",
-			headerRight: () => (
-				<HStack space={4}>
-					<Button
-						_text={{ fontSize: 18, fontWeight: 400, color: "primary" }}
-						_pressed={{ opacity: 0.5 }}
-						onPress={toggleEditing}
-						px={0}
-					>
-						{isEditing ? "Cancel" : "Edit"}
-					</Button>
-					{isEditing && (
-						<IconButton
-							px={0}
-							icon={
-								<Icon as={Ionicons} name="ios-trash-outline" color="primary" />
-							}
-							_pressed={{ opacity: 0.5 }}
-							onPress={handleMultipleDelete}
-						/>
-					)}
-				</HStack>
-			),
-			headerLeft: () =>
-				isEditing && (
-					<Button
-						_text={{ fontSize: 18, fontWeight: 400, color: "primary" }}
-						_pressed={{ opacity: 0.5 }}
-						px={0}
-						onPress={() =>
-							handleMultipleSelect(state.sessions.length != selected.length)
-						}
-					>
-						{state.sessions.length == selected.length
-							? "Deselect All"
-							: "Select all"}
-					</Button>
-				),
-		});
-	}, [state.sessions, selected, isEditing]);
 
 	return (
 		<View flex={1}>

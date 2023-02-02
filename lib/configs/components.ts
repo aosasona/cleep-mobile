@@ -56,4 +56,17 @@ export const componentsConfig = {
       },
     },
   },
+  ActionsheetContent: {
+    baseStyle: () => ({
+      _dark: {
+        bg: "muted.900",
+        _dragIndicator: {
+          bg: "muted.700",
+        },
+      },
+      _dragIndicator: {
+        width: 8,
+      },
+    }),
+  },
 };

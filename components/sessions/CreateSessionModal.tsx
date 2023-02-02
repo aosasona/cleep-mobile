@@ -1,10 +1,12 @@
 import { Feather } from "@expo/vector-icons";
 import {
+  Box,
   Button,
   Icon,
   IconButton,
   Input,
   Modal,
+  Text,
   useColorModeValue,
 } from "native-base";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
@@ -12,6 +14,7 @@ import { createSession } from "../../lib/requests/session";
 import { handleException } from "../../lib/error";
 import { showToast } from "../../lib/toast";
 import { GlobalContext } from "../../context/global/Provider";
+import { appColors } from "../../lib/configs/theme";
 
 interface Props {
   signingKey: string;
@@ -63,7 +66,7 @@ export default function CreateModal({
       <Modal.Content bg={bg}>
         <Modal.CloseButton />
         <Modal.Header bg={bg} borderBottomWidth={0} pt={5}>
-          New Session
+          Create Session
         </Modal.Header>
         <Modal.Body bg={bg} px={1} pt={1} pb={0} _scrollview={{ bg }}>
           <Input
@@ -82,6 +85,19 @@ export default function CreateModal({
               />
             }
           />
+
+          <Box
+            bgColor={`${appColors["primary-faded"]}`}
+            p={4}
+            mt={4}
+            rounded={10}
+          >
+            <Text color="primary" fontSize={12}>
+              A signing key (otherwise known as a session password) is used to
+              prevent access to your session and encrypt its data. This CAN NOT
+              be changed after the session is created.
+            </Text>
+          </Box>
         </Modal.Body>
         <Modal.Footer bg={bg} borderTopWidth={0} pb={6}>
           <Button

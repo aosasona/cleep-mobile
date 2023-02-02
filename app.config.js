@@ -24,6 +24,9 @@ export default {
 		bundleIdentifier: IS_IN_DEVELOPMENT
 			? "com.wytehq.cleep.dev"
 			: "com.wytehq.cleep",
+		config: {
+			usesNonExemptEncryption: false,
+		},
 	},
 	android: {
 		adaptiveIcon: {

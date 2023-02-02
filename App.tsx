@@ -13,6 +13,7 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import { NativeBaseProvider } from "native-base";
 import { useEffect, useState } from "react";
+import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import MainStack from "./app/stacks/main";
 import { GlobalProvider } from "./context/global/Provider";
@@ -21,9 +22,10 @@ import { migrate } from "./lib/db/database";
 
 (async () => await SplashScreen.preventAutoHideAsync())();
 
-export default function AppEntry() {
+export default function App() {
 	const [navReady, setNavReady] = useState(false);
 	const [appIsReady, setAppIsReady] = useState(false);
+	const [migrationComplete, setMigrationComplete] = useState(false);
 	let [fontsLoaded] = useFonts({
 		Poppins_100Thin,
 		Poppins_200ExtraLight,
@@ -37,41 +39,38 @@ export default function AppEntry() {
 	});
 
 	useEffect(() => {
-		if (fontsLoaded) {
-			setAppIsReady(true);
-		}
-	}, [fontsLoaded]);
-
-	useEffect(() => {
 		migrate();
+		setMigrationComplete(true);
 	}, []);
 
 	useEffect(() => {
 		(async () => {
-			if (fontsLoaded && navReady && appIsReady) {
+			if (appIsReady && navReady && migrationComplete) {
 				await SplashScreen.hideAsync();
 			}
 		})();
-	}, [fontsLoaded, navReady, appIsReady]);
+	}, [appIsReady, navReady, migrationComplete]);
 
 	const onNavReady = () => {
 		setNavReady(true);
 	};
 
-	if (!appIsReady) {
+	if (!fontsLoaded) {
 		return null;
 	}
 
 	return (
-		<NativeBaseProvider
-			colorModeManager={colorModeManager}
-			theme={extendedTheme}
-		>
-			<GlobalProvider>
-				<SafeAreaProvider>
-					<MainStack onNavReady={onNavReady} />
-				</SafeAreaProvider>
-			</GlobalProvider>
-		</NativeBaseProvider>
+		<View style={{ flex: 1 }} onLayout={() => setAppIsReady(true)}>
+			<NativeBaseProvider
+				colorModeManager={colorModeManager}
+				theme={extendedTheme}
+			>
+				<GlobalProvider>
+					<SafeAreaProvider>
+						<MainStack onNavReady={onNavReady} />
+					</SafeAreaProvider>
+				</GlobalProvider>
+			</NativeBaseProvider>
+		</View>
 	);
 }

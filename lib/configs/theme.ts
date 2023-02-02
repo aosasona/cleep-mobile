@@ -1,12 +1,13 @@
-import {ColorMode, extendTheme, StorageManager} from "native-base";
+import { ColorMode, extendTheme, StorageManager } from "native-base";
 import Keys from "../../constants/keys";
 import storage from "../storage/default";
-import {componentsConfig} from "./components";
+import { componentsConfig } from "./components";
 
 export const appColors = {
 	dark: "#000000",
 	light: "#f1f1f1",
 	primary: "#E11D48",
+	"primary-faded": "#E11D4833",
 	"light-faded": "#6A6A6A",
 	"dark-faded": "#A8A8A8",
 };
@@ -17,8 +18,7 @@ export const colorModeManager: StorageManager = {
 			const hasColorMode = storage.contains(Keys.COLOR_MODE);
 			if (!hasColorMode) return "light";
 			return storage.getString(Keys.COLOR_MODE) as ColorMode;
-		}
-		catch (err) {
+		} catch (err) {
 			return "light";
 		}
 	},

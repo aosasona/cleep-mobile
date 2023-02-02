@@ -14,7 +14,7 @@ export function getSessionByID(id: number): Session {
   return session?.rows?._array[0] || null;
 }
 
-export function getSessionBySessionID(session_id: number): Session {
+export function getSessionBySessionID(session_id: string): Session | null {
   const session = db.execute(`SELECT * FROM sessions WHERE session_id = ?`, [
     session_id,
   ]);

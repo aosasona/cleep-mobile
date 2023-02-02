@@ -2,7 +2,7 @@ import { api, APIResponse, SessionCheckResult } from "./api";
 import { createSession as dbCreateSession } from "../db/session";
 import CustomException from "../error";
 import { getPassSSKey } from "../storage/keys";
-import * as SecureStore from "expo-secure-store";
+import SecureStore from "../storage/secure";
 
 export async function createSession(
   signingKey: string,
@@ -23,7 +23,7 @@ export async function createSession(
   }
 
   const secureSessionKey = getPassSSKey(result?.data?.session_id);
-  await SecureStore.setItemAsync(secureSessionKey, signingKey);
+  await SecureStore.set(secureSessionKey, signingKey);
 
   dbCreateSession(result.data?.session_id, result.data?.ttl);
 
