@@ -1,19 +1,15 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
-    AspectRatio,
-    Box,
+    Fab,
     Flex,
     HStack,
     Icon,
     IconButton,
-    ScrollView,
     Spinner,
-    Text,
     useDisclose,
     View,
-    VStack,
 } from "native-base";
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Alert } from "react-native";
 import CustomSafeAreaView from "../../../components/custom/CustomSafeAreaView";
 import { appColors } from "../../../lib/configs/theme";
@@ -169,6 +165,14 @@ export default function Cleepboard({ navigation, route }: ScreenProps) {
                         message="Good news is, it looks like you're connected. Bad news is, there's nothing on your Cleepboard."
                     />
                 )}
+            />
+            <Fab
+                renderInPortal={false}
+                shadow={3}
+                bottom={6}
+                right={6}
+                bg="primary"
+                icon={<Icon color="muted.50" as={AntDesign} name="plus" size="2xl" />}
             />
             <StatusIndicator retrying={retrying} connected={connected} />
             <ConnectionSheet url={connectionUrl} isOpen={isOpen} onClose={onClose} />

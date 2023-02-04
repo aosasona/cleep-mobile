@@ -1,20 +1,10 @@
-import { Feather, Ionicons } from "@expo/vector-icons";
-import {
-  Box,
-  HStack,
-  Icon,
-  IconButton,
-  Pressable,
-  Text,
-  VStack,
-} from "native-base";
+import { Feather } from "@expo/vector-icons";
+import { Box, HStack, Icon, Pressable, Text } from "native-base";
 import { useMemo } from "react";
 import { generateRandomColor } from "../../lib/colors";
 import { Cleep } from "../../lib/types";
-import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
 import { Alert, Share } from "react-native";
-import { showToast } from "../../lib/toast";
 
 interface Props {
   cleep: Cleep;
@@ -27,15 +17,6 @@ export default function CleepCard({ cleep }: Props) {
     try {
       await Share.share({ title: "Cleep", message: cleep.content });
       Haptics.selectionAsync().then().catch();
-    } catch (err: any) {
-      Alert.alert("Error", "Unable to share");
-    }
-  };
-
-  const copyContent = async () => {
-    try {
-      await Clipboard.setStringAsync(cleep.content);
-      showToast("Success", "Copied to clipboard", "done");
     } catch (err: any) {
       Alert.alert("Error", "Unable to share");
     }
