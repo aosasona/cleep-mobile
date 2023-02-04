@@ -124,7 +124,7 @@ export default function Scan({ navigation }: ScreenProps) {
 							<Box h="full" justifyContent="center">
 								<Text maxW="80%" textAlign="center" mx="auto">
 									Go to <Text color="primary">cleep.app</Text> or create a
-									session on another device to get the QR code
+									session on another device to get a QR code
 								</Text>
 								<AspectRatio
 									width={width * 0.9}
@@ -167,7 +167,7 @@ export default function Scan({ navigation }: ScreenProps) {
 										_pressed={{ opacity: 0.5 }}
 										onPress={handleJoin}
 									>
-										Join session manually
+										Join session
 									</Button>
 								</VStack>
 							</Box>

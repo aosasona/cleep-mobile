@@ -1,23 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
 import {
   Actionsheet,
-  AspectRatio,
   Box,
   Center,
   Heading,
   HStack,
   Icon,
   IconButton,
-  Input,
   Text,
   useColorModeValue,
   VStack,
 } from "native-base";
-import { useWindowDimensions } from "react-native";
+import { Share, useWindowDimensions } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { appColors } from "../../lib/configs/theme";
 import { showToast } from "../../lib/toast";
-import * as Clipboard from "expo-clipboard";
 
 interface Props {
   url: string;
@@ -29,13 +26,15 @@ export default function ConnectionSheet({ url, isOpen, onClose }: Props) {
   const { width } = useWindowDimensions();
   const bg = useColorModeValue("muted.100", "muted.800");
 
-  async function copyURL() {
+  async function shareSession() {
     try {
-      await Clipboard.setStringAsync(url);
-      showToast("Success", "Copied to clipboard!", "done");
+      Share.share({
+        message:
+          "Hey there! Click this link to join my Cleep session, I'll provide you with the session password soon 😉",
+        url: url,
+      });
     } catch (err: any) {
-      console.log(err.message);
-      showToast("Error", "Failed to copy", "error");
+      showToast("Error", "Failed to share", "error");
     }
   }
 
@@ -47,11 +46,7 @@ export default function ConnectionSheet({ url, isOpen, onClose }: Props) {
           <Center bg="muted.50" p={3} rounded={10}>
             <QRCode
               value={url}
-              logo={require("../../assets/favicon.png")}
-              logoSize={30}
-              logoMargin={10}
-              logoBorderRadius={6}
-              logoBackgroundColor={appColors.primary}
+              logo={require("../../assets/qr-logo.png")}
               size={width * 0.8}
               onError={(err) =>
                 showToast("Error", "Something went wrong!", "error")
@@ -78,18 +73,18 @@ export default function ConnectionSheet({ url, isOpen, onClose }: Props) {
             bg={bg}
             justifyContent="space-between"
             alignItems="center"
-            px={4}
+            px={3}
             py={3}
             rounded={10}
           >
-            <Text fontSize={12} textAlign="left" opacity={0.8}>
+            <Text fontSize={12} textAlign="left" opacity={0.8} px={1}>
               {url}
             </Text>
             <IconButton
-              icon={<Icon as={Ionicons} name="ios-copy-outline" />}
+              icon={<Icon as={Ionicons} name="ios-share-outline" />}
               _icon={{ size: 5, color: "primary" }}
               _pressed={{ opacity: 0.5 }}
-              onPress={copyURL}
+              onPress={shareSession}
             />
           </HStack>
         </VStack>

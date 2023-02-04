@@ -56,7 +56,7 @@ export default function SessionCard({
       _pressed={{ opacity: 0.5 }}
       disabled={expired}
       py={3}
-      px={3}
+      pr={2}
       onPress={() => (isEditing ? handleSelect(idx) : goToCleepboard())}
     >
       <HStack justifyContent="space-between" alignItems="center">
@@ -69,10 +69,10 @@ export default function SessionCard({
                 rounded="full"
                 accessibilityLabel="Select session"
                 onChange={() => handleSelect(idx)}
-                mx={1}
+                ml={3}
               />
             )}
-            <VStack space={1}>
+            <VStack space={1} pl={isEditing ? 2 : 4}>
               <Text opacity={expired ? 0.4 : 1} strikeThrough={expired}>
                 {session.session_id}
               </Text>

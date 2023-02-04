@@ -1,4 +1,4 @@
-import { create } from "apisauce";
+import { ApisauceInstance, create } from "apisauce";
 
 export interface APIResponse {
   message: string;
@@ -23,3 +23,16 @@ export const WEB_URL = "www.cleep.app";
 export const api = create({
   baseURL: API_URL,
 });
+
+export function initRequestsWithHeaders(
+  sessionID: string,
+  signingKey: string
+): ApisauceInstance {
+  return create({
+    baseURL: API_URL,
+    headers: {
+      "X-Session-ID": sessionID,
+      "X-Signing-Key": signingKey,
+    },
+  });
+}

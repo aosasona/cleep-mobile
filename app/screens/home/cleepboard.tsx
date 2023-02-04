@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
+    AspectRatio,
     Box,
     Flex,
     HStack,
@@ -10,6 +11,7 @@ import {
     Text,
     useDisclose,
     View,
+    VStack,
 } from "native-base";
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Alert } from "react-native";
@@ -20,9 +22,15 @@ import CustomException, { handleException } from "../../../lib/error";
 import { WEB_URL } from "../../../lib/requests/api";
 import { getPassSSKey } from "../../../lib/storage/keys";
 import SecureStore from "../../../lib/storage/secure";
-import { ScreenProps } from "../../../lib/types";
+import { Cleep, ScreenProps } from "../../../lib/types";
 import ConnectionSheet from "../../../components/sessions/ConnectionSheet";
-import StatusIndicator from "../../../components/sessions/StstusIndicator";
+import StatusIndicator from "../../../components/sessions/StatusIndicator";
+import { initSocket } from "../../../lib/realtime/socket";
+import { handleSocketEvent } from "../../../lib/realtime/handler";
+import { showToast } from "../../../lib/toast";
+import { MasonryFlashList } from "@shopify/flash-list";
+import CleepCard from "../../../components/cleeps/CleepCard";
+import Ghost from "../../../components/sessions/Ghost";
 
 interface SessionState {
     session_id: string;
@@ -42,11 +50,15 @@ export default function Cleepboard({ navigation, route }: ScreenProps) {
     const [loading, setLoading] = useState(true);
     const [connected, setConnected] = useState(false);
     const [retrying, setRetrying] = useState(false);
+    const [reconnectionCount, setReconnectionCount] = useState(0);
+    const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
+    const [cleeps, setCleeps] = useState<Cleep[]>([]);
     const [session, setSession] = useState<SessionState>({
         session_id: "",
         signing_key: "",
         ttl: 0,
     });
+    const [error, setError] = useState<Error | CustomException>(null);
 
     useEffect(() => {
         (async () => await loadSessionData())();
@@ -90,9 +102,51 @@ export default function Cleepboard({ navigation, route }: ScreenProps) {
         }
     }
 
+    useEffect(() => {
+        if (!error) return;
+        const msg = handleException(error);
+        showToast("Error", msg, "error");
+        setTimeout(() => setError(null), 5000);
+    }, [error]);
+
+    useEffect(() => {
+        const { session_id, signing_key } = session;
+
+        if (!(session_id && signing_key)) return;
+
+        const socket = initSocket({
+            session_id,
+            signing_key,
+            reconnection_count: reconnectionCount,
+        });
+
+        socket.connect();
+
+        handleSocketEvent({
+            socket,
+            session: { session_id, signing_key },
+            data: cleeps,
+            setData: setCleeps,
+            hasFetchedOnce,
+            toggleConnectionStatus: setConnected,
+            reconnectionCount,
+            setReconnectionCount,
+            onFetch: () => setHasFetchedOnce(true),
+            onError: (err) => {
+                setError(err);
+            },
+            startRetrying: () => setRetrying(true),
+            stopRetrying: () => setRetrying(false),
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, [session.session_id, session.signing_key, loading]);
+
     const connectionUrl = `https://${WEB_URL}/connect?sessionID=${session_id}`;
 
-    if (loading) {
+    if (loading || !connected) {
         return (
             <CustomSafeAreaView>
                 <Flex flex={1} alignItems="center" justifyContent="center">
@@ -103,10 +157,19 @@ export default function Cleepboard({ navigation, route }: ScreenProps) {
     }
 
     return (
-        <View flex={1}>
-            <ScrollView>
-                <Text>{session_id}</Text>
-            </ScrollView>
+        <View flex={1} pl={3}>
+            <MasonryFlashList
+                data={cleeps}
+                renderItem={({ item }) => <CleepCard key={item.id} cleep={item} />}
+                numColumns={2}
+                estimatedItemSize={200}
+                ListEmptyComponent={() => (
+                    <Ghost
+                        headerText="Yikes!"
+                        message="Good news is, it looks like you're connected. Bad news is, there's nothing on your Cleepboard."
+                    />
+                )}
+            />
             <StatusIndicator retrying={retrying} connected={connected} />
             <ConnectionSheet url={connectionUrl} isOpen={isOpen} onClose={onClose} />
         </View>

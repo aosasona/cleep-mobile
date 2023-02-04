@@ -2,7 +2,12 @@ import { AspectRatio, Box, Heading, Text, VStack } from "native-base";
 import { useWindowDimensions } from "react-native";
 import Lottie from "lottie-react-native";
 
-export default function NoSessions() {
+interface Props {
+  headerText?: string;
+  message?: string;
+}
+
+export default function NoSessions({ headerText, message }: Props) {
   const { width, height } = useWindowDimensions();
 
   const lottieWidth = width * 0.6;
@@ -22,14 +27,15 @@ export default function NoSessions() {
             />
           </Box>
         </AspectRatio>
-        <Heading textAlign="center">No sessions</Heading>
+        <Heading textAlign="center">{headerText || "No sessions"}</Heading>
         <Text
           fontSize={14}
           maxW={width * 0.75}
           textAlign="center"
           opacity={0.5}
         >
-          Looks like you have not joined any Cleep sessions on this device.
+          {message ||
+            "Looks like you have not joined any Cleep sessions on this device."}
         </Text>
       </VStack>
     </Box>

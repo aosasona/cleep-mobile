@@ -23,7 +23,7 @@ import {
 } from "react";
 import { Alert, RefreshControl } from "react-native";
 import CreateModal from "../../../components/sessions/CreateSessionModal";
-import NoSessions from "../../../components/sessions/NoSessions";
+import Ghost from "../../../components/sessions/Ghost";
 import SessionCard from "../../../components/sessions/SessionCard";
 import { GlobalContext } from "../../../context/global/Provider";
 import { GlobalActionEnum } from "../../../context/global/Reducer";
@@ -186,7 +186,7 @@ export default function Home({ navigation }: ScreenProps) {
 						<Spinner color="primary" />
 					</Box>
 				) : state.sessions?.length > 0 ? (
-					<VStack divider={<Divider opacity={0.3} />} mt={2} px={1}>
+					<VStack divider={<Divider opacity={0.3} />} mt={2}>
 						{state.sessions.map((session, idx) => (
 							<SessionCard
 								key={idx}
@@ -200,7 +200,7 @@ export default function Home({ navigation }: ScreenProps) {
 						))}
 					</VStack>
 				) : (
-					<NoSessions />
+					<Ghost />
 				)}
 			</ScrollView>
 			<CreateModal
