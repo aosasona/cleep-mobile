@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 import CustomException from "../error";
 import CleepMutator from "../mutators/Cleep";
 import { getCleeps } from "../requests/cleep";
-import { Cleep } from "../types";
+import { Cleep, CleepEvents, WSEvents } from "../types";
 
 interface HandlerArgs {
   socket: Socket;
@@ -36,7 +36,7 @@ export function handleSocketEvent(args: HandlerArgs) {
     toggleConnectionStatus,
   } = args;
 
-  socket.on("connect", async () => {
+  socket.on(WSEvents.CONNECT, async () => {
     if (!hasFetchedOnce) {
       try {
         const data = await getCleeps(session.session_id, session.signing_key);
@@ -50,16 +50,16 @@ export function handleSocketEvent(args: HandlerArgs) {
     }
   });
 
-  socket.on("disconnected", () => {
+  socket.on(WSEvents.DISCONNECTED, () => {
     toggleConnectionStatus(false);
   });
 
-  socket.on("reconnect", () => {
+  socket.on(WSEvents.RECONNECT, () => {
     toggleConnectionStatus(true);
     stopRetrying();
   });
 
-  socket.on("connect_error", (err) => {
+  socket.on(WSEvents.CONNECT_ERROR, (err) => {
     toggleConnectionStatus(false);
     startRetrying();
     setReconnectionCount((prev) => prev + 1);
@@ -69,9 +69,31 @@ export function handleSocketEvent(args: HandlerArgs) {
     }
   });
 
-  socket.on("new_cleep", (cleep: Cleep) => {
+  socket.on(CleepEvents.CREATED, (cleep: Cleep) => {
     if (!CleepMutator.find(data, cleep)) {
       setData((prev) => [cleep, ...prev]);
     }
   });
+
+  socket.on(CleepEvents.DELETED, (cleepId: string) => {
+    let copiedData = data;
+    const cleepIdx = data.findIndex((c) => c.id == cleepId);
+    if (cleepIdx < 0) return;
+    const newData = copiedData.filter((c) => c.id != cleepId);
+    setData([...newData]);
+  });
+
+  socket.on(
+    CleepEvents.UPDATED,
+    ({ id, content }: { id: string; content: string }) => {
+      if (!CleepMutator.find(data, { id } as Cleep)) {
+        return;
+      }
+
+      let copiedData = data;
+      const cleepIdx = data.findIndex((c) => c.id == id);
+      copiedData[cleepIdx].content = content;
+      setData([...copiedData]);
+    }
+  );
 }

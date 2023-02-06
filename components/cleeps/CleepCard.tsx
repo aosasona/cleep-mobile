@@ -2,15 +2,19 @@ import { Feather } from "@expo/vector-icons";
 import { Box, HStack, Icon, Pressable, Text } from "native-base";
 import { useMemo } from "react";
 import { generateRandomColor } from "../../lib/colors";
-import { Cleep } from "../../lib/types";
+import { Cleep, Session } from "../../lib/types";
 import * as Haptics from "expo-haptics";
 import { Alert, Share } from "react-native";
+import { NavigationProp } from "@react-navigation/native";
+import { screens } from "../../constants/screens";
 
 interface Props {
+  navigation: NavigationProp<any>;
   cleep: Cleep;
+  session: Session;
 }
 
-export default function CleepCard({ cleep }: Props) {
+export default function CleepCard({ navigation, cleep, session }: Props) {
   const bg = useMemo(() => generateRandomColor(0.18), []);
 
   const shareContent = async () => {
@@ -30,6 +34,14 @@ export default function CleepCard({ cleep }: Props) {
       px={3}
       py={3}
       rounded={8}
+      onPress={() =>
+        cleep.type == "text"
+          ? navigation.navigate(screens.ADD_CLEEP, {
+            session,
+            cleep,
+          })
+          : null
+      }
       onLongPress={shareContent}
       my={1.5}
     >

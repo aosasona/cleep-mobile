@@ -18,7 +18,7 @@ import CustomException, { handleException } from "../../../lib/error";
 import { WEB_URL } from "../../../lib/requests/api";
 import { getPassSSKey } from "../../../lib/storage/keys";
 import SecureStore from "../../../lib/storage/secure";
-import { Cleep, ScreenProps } from "../../../lib/types";
+import { Cleep, ScreenProps, Session } from "../../../lib/types";
 import ConnectionSheet from "../../../components/sessions/ConnectionSheet";
 import StatusIndicator from "../../../components/sessions/StatusIndicator";
 import { initSocket } from "../../../lib/realtime/socket";
@@ -27,15 +27,11 @@ import { showToast } from "../../../lib/toast";
 import { MasonryFlashList } from "@shopify/flash-list";
 import CleepCard from "../../../components/cleeps/CleepCard";
 import Ghost from "../../../components/sessions/Ghost";
-
-interface SessionState {
-    session_id: string;
-    signing_key: string;
-    ttl: number;
-}
+import { screens } from "../../../constants/screens";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Cleepboard({ navigation, route }: ScreenProps) {
-    const { session_id } = route.params as any;
+    const session_id = (route.params as any)?.session_id;
 
     if (!session_id) {
         navigation.goBack();
@@ -49,12 +45,14 @@ export default function Cleepboard({ navigation, route }: ScreenProps) {
     const [reconnectionCount, setReconnectionCount] = useState(0);
     const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
     const [cleeps, setCleeps] = useState<Cleep[]>([]);
-    const [session, setSession] = useState<SessionState>({
+    const [session, setSession] = useState<Session>({
         session_id: "",
         signing_key: "",
         ttl: 0,
     });
     const [error, setError] = useState<Error | CustomException>(null);
+
+    const focused = useIsFocused();
 
     useEffect(() => {
         (async () => await loadSessionData())();
@@ -138,7 +136,7 @@ export default function Cleepboard({ navigation, route }: ScreenProps) {
         return () => {
             socket.disconnect();
         };
-    }, [session.session_id, session.signing_key, loading]);
+    }, [session.session_id, session.signing_key, cleeps, loading]);
 
     const connectionUrl = `https://${WEB_URL}/connect?sessionID=${session_id}`;
 
@@ -156,9 +154,17 @@ export default function Cleepboard({ navigation, route }: ScreenProps) {
         <View flex={1} pl={3}>
             <MasonryFlashList
                 data={cleeps}
-                renderItem={({ item }) => <CleepCard key={item.id} cleep={item} />}
+                renderItem={({ item }) => (
+                    <CleepCard
+                        key={item.id}
+                        navigation={navigation}
+                        cleep={item}
+                        session={session}
+                    />
+                )}
                 numColumns={2}
                 estimatedItemSize={200}
+                showsVerticalScrollIndicator={false}
                 ListEmptyComponent={() => (
                     <Ghost
                         headerText="Yikes!"
@@ -173,6 +179,7 @@ export default function Cleepboard({ navigation, route }: ScreenProps) {
                 right={6}
                 bg="primary"
                 icon={<Icon color="muted.50" as={AntDesign} name="plus" size="2xl" />}
+                onPress={() => navigation.navigate(screens.ADD_CLEEP, { session })}
             />
             <StatusIndicator retrying={retrying} connected={connected} />
             <ConnectionSheet url={connectionUrl} isOpen={isOpen} onClose={onClose} />

@@ -11,11 +11,11 @@ export default class CleepMutator {
     return dup;
   }
 
-  static delete(data: Cleep[], cleep: Cleep): Cleep[] {
-    const exists = CleepMutator.find(data, cleep);
-    if (exists) return;
+  static delete(data: Cleep[], cleepId: string): Cleep[] {
+    const exists = CleepMutator.find(data, { id: cleepId } as Cleep);
+    if (!exists) return;
 
-    return data.filter((c) => c.id != cleep.id);
+    return data.filter((c) => c.id != cleepId);
   }
 
   static find(data: Cleep[], cleep: Cleep): Cleep | null {

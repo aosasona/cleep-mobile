@@ -5,6 +5,7 @@ import {
   Switch,
   Text,
   useColorMode,
+  useColorModeValue,
   VStack,
 } from "native-base";
 import { useContext } from "react";
@@ -15,13 +16,24 @@ import {
 import { GlobalContext } from "../../../context/global/Provider";
 import { GlobalActionEnum } from "../../../context/global/Reducer";
 import { showAlert } from "../../../lib/toast";
+import { Picker } from "@react-native-picker/picker";
+import { useWindowDimensions } from "react-native";
+import { isAndroid } from "../../../lib/platform";
+
+interface AvailableDuration {
+  label: string;
+  value: number;
+}
 
 export default function Settings() {
   const { state, dispatch } = useContext(GlobalContext);
 
   const { toggleColorMode, colorMode } = useColorMode();
+  const { width } = useWindowDimensions();
 
   const isDarkMode = colorMode === "dark";
+
+  const color = useColorModeValue("black", "white");
 
   const toggleTheme = () => {
     toggleColorMode();
@@ -32,7 +44,7 @@ export default function Settings() {
   };
 
   const changeDefaultSessionDuration = (val: number) => {
-    if (val == 8) {
+    if (val == 0) {
       showAlert(
         "Unavailable",
         "Sorry, this feature is not available yet",
@@ -46,6 +58,43 @@ export default function Settings() {
     });
   };
 
+  const availableDurations: AvailableDuration[] = [
+    {
+      label: "1",
+      value: 1,
+    },
+    {
+      label: "2",
+      value: 2,
+    },
+    {
+      label: "3",
+      value: 3,
+    },
+    {
+      label: "4",
+      value: 4,
+    },
+    {
+      label: "5",
+      value: 5,
+    },
+    {
+      label: "6",
+      value: 6,
+    },
+    {
+      label: "7",
+      value: 7,
+    },
+    {
+      label: "Unlimited",
+      value: 0,
+    },
+  ];
+
+  const DurComponent = isAndroid ? HStack : VStack;
+
   return (
     <ScrollView>
       <VStack space={4}>
@@ -54,35 +103,36 @@ export default function Settings() {
           <Switch value={isDarkMode} onToggle={toggleTheme} />
         </HStack>
 
-        <VStack w="full" space={3} {...SettingsVStackProps}>
-          <HStack justifyContent="space-between" alignItems="center">
-            <Text>Default session duration</Text>
-            <Text fontSize={12} opacity={0.6}>
-              {state.defaultSessionDuration}
-            </Text>
-          </HStack>
-          <Slider
-            w="full"
-            defaultValue={state.defaultSessionDuration}
-            value={state.defaultSessionDuration}
-            minValue={1}
-            maxValue={8}
-            onChange={changeDefaultSessionDuration}
+        <DurComponent
+          justifyContent="space-between"
+          alignItems="center"
+          {...SettingsVStackProps}
+          space={2}
+        >
+          <Text>Session duration</Text>
+          <Picker
+            selectedValue={state.defaultSessionDuration}
+            onValueChange={(value, idx) => changeDefaultSessionDuration(value)}
+            mode="dialog"
+            prompt="Select a default session duration"
+            dropdownIconColor={color}
+            style={{
+              width: isAndroid ? width * 0.4 : "100%",
+              color: color,
+            }}
+            itemStyle={{
+              color: color,
+            }}
           >
-            <Slider.Track>
-              <Slider.FilledTrack bg="primary" />
-            </Slider.Track>
-            <Slider.Thumb bg="primary" />
-          </Slider>
-          <HStack justifyContent="space-between" alignItems="center" py={1}>
-            <Text fontSize={10} opacity={0.5}>
-              1 day
-            </Text>
-            <Text fontSize={10} opacity={0.5}>
-              Unlimited
-            </Text>
-          </HStack>
-        </VStack>
+            {availableDurations.map((current, idx) => (
+              <Picker.Item
+                key={idx}
+                label={current.label}
+                value={current.value}
+              />
+            ))}
+          </Picker>
+        </DurComponent>
       </VStack>
     </ScrollView>
   );

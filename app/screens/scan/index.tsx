@@ -27,7 +27,7 @@ import { isAndroid } from "../../../lib/platform";
 import { checkSession } from "../../../lib/requests/session";
 import { getPassSSKey } from "../../../lib/storage/keys";
 import SecureStore from "../../../lib/storage/secure";
-import { showAlert, showToast } from "../../../lib/toast";
+import { showToast } from "../../../lib/toast";
 import { ScreenProps } from "../../../lib/types";
 
 export default function Scan({ navigation }: ScreenProps) {

@@ -32,7 +32,7 @@ export default function CustomPrompt({
   toggleShow,
   handleSubmit,
 }: Props) {
-  const [isText, setIsText] = useState(true);
+  const [isText, setIsText] = useState(!isPasswordField);
   const bg = useColorModeValue("muted.50", "muted.900");
   const color = useColorModeValue("muted.900", "muted.50");
 

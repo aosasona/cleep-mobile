@@ -177,9 +177,11 @@ export default function Home({ navigation }: ScreenProps) {
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}
 			>
-				<Heading fontSize={40} px={3}>
-					Sessions
-				</Heading>
+				{state?.sessions?.length > 0 && (
+					<Heading fontSize={40} px={3}>
+						Sessions
+					</Heading>
+				)}
 
 				{state.isLoadingSessions ? (
 					<Box height={100} justifyContent="center">

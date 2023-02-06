@@ -17,7 +17,7 @@ export function showToast(
   preset: "done" | "error"
 ) {
   Burnt.toast({
-    title: title,
+    title: "",
     message: msg,
     preset: preset,
     duration: 4,
