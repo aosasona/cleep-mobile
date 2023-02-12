@@ -46,7 +46,6 @@ export default function ConnectionSheet({ url, isOpen, onClose }: Props) {
           <Center bg="muted.50" p={3} rounded={10}>
             <QRCode
               value={url}
-              logo={require("../../assets/qr-logo.png")}
               size={width * 0.8}
               onError={(err) =>
                 showToast("Error", "Something went wrong!", "error")

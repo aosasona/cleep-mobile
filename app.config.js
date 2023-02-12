@@ -3,7 +3,7 @@ const IS_IN_DEVELOPMENT = process.env.APP_ENVIRONMENT === "development";
 export default {
 	name: IS_IN_DEVELOPMENT ? "Cleep Dev" : "Cleep",
 	slug: "cleep",
-	version: "0.1.0",
+	version: "0.1.10",
 	orientation: "portrait",
 	icon: "./assets/" + (IS_IN_DEVELOPMENT ? "icon-alternate.png" : "icon.png"),
 	userInterfaceStyle: "automatic",
