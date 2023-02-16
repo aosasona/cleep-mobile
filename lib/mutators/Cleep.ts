@@ -13,12 +13,12 @@ export default class CleepMutator {
 
   static delete(data: Cleep[], cleepId: string): Cleep[] {
     const exists = CleepMutator.find(data, { id: cleepId } as Cleep);
-    if (!exists) return;
+    if (!exists) return data;
 
     return data.filter((c) => c.id != cleepId);
   }
 
   static find(data: Cleep[], cleep: Cleep): Cleep | null {
-    return data.find((c) => c.id == cleep.id);
+    return data.find((c) => c.id == cleep.id) || null;
   }
 }
